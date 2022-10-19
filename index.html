@@ -11,7 +11,8 @@
 
     <script type="module">
       import { startApp } from './build/bundle.js';
-      import * as localConfig from './config/local.js';
+      import * as localConfig from './config/local.example.js'; // Mapbox
+      // import * as localConfig from './config/local.js'; // Atlas
 
       startApp(document.body, { localConfig });
     </script>

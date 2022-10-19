@@ -1,5 +1,5 @@
-// Replace with your Mapbox GL token, if any
-const mapboxGlAccessToken = 'pk.eyAAAABBBCCC';
+const mapboxGlAccessToken =
+  'pk.eyJ1Ijoicm9ibGFicyIsImEiOiJwVlg0cnZnIn0.yhekddtKwZohGoORaWjqIw';
 
 const stylePresets = [
   {
