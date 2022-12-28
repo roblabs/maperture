@@ -1,10 +1,8 @@
 const mapboxGlAccessToken =
   'pk.eyJ1IjoiYXRsYXMtdXNlciIsImEiOiJjazFmdGx2bjQwMDAwMG5wZmYwbmJwbmE2In0.lWXK2UexpXuyVitesLdwUg';
 
-// Set `API_URL` if your Mapbox flavored style uses a different server than `api.mapbox.com`.
-const config = {
-  "API_URL": 'https://atlas-stg.geoplatform.gov'
-}
+// Set `mapbox.baseApiUrl` if your Mapbox flavored style uses a different server than `api.mapbox.com`.
+const mapboxBaseApiUrl = 'https://atlas-stg.geoplatform.gov'
 
 const stylePresets = [
   {
@@ -33,4 +31,7 @@ const stylePresets = [
   }
 ];
 
-export { mapboxGlAccessToken, stylePresets, config };
+export { mapboxGlAccessToken, 
+  mapboxBaseApiUrl,
+  stylePresets
+};

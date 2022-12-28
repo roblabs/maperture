@@ -1,6 +1,8 @@
 const mapboxGlAccessToken =
   'pk.eyJ1Ijoicm9ibGFicyIsImEiOiJwVlg0cnZnIn0.yhekddtKwZohGoORaWjqIw';
 
+// const mapboxBaseApiUrl = 'https://api.mapbox.com'
+
 const stylePresets = [
   {
     id: 'mapbox-streets',
@@ -39,4 +41,6 @@ const stylePresets = [
 // Example of stylePresetUrls
 // const stylePresetUrls = ['./presets/example.json'];
 
-export { mapboxGlAccessToken, stylePresets };
+export { mapboxGlAccessToken, 
+  // mapboxBaseApiUrl,
+  stylePresets };
