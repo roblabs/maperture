@@ -1,7 +1,23 @@
-const mapboxGlAccessToken =
-  'pk.eyJ1Ijoicm9ibGFicyIsImEiOiJwVlg0cnZnIn0.yhekddtKwZohGoORaWjqIw';
+// Replace with your Mapbox GL token, if any
+const mapboxGlAccessToken = 'pk.eyAAAABBBCCC';
 
-// const mapboxBaseApiUrl = 'https://api.mapbox.com'
+// Example of setting up a gazetteer object. This is described in the `README`
+// but these are the options that populate the dropdown in the UI that take you
+// to specific locations or map views. You can add as many as you like here and
+// create groupings (in this example, the only group is called Locations).
+const gazetteer = {
+  Locations: [
+    {
+      'San Francisco, CA': {
+        zoom: 18,
+        center: { lng: -122.4193, lat: 37.7648 },
+      },
+    },
+    {
+      'Washington DC': { zoom: 12, center: { lng: -77.0435, lat: 38.9098 } },
+    },
+  ],
+};
 
 const stylePresets = [
   {
@@ -22,6 +38,14 @@ const stylePresets = [
     type: 'mapbox-gl',
     url: 'mapbox://styles/mapbox/dark-v10',
   },
+  {
+    id: 'openstreetmap',
+    name: 'OpenStreetMap',
+    type: 'leaflet',
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
 ];
 
 // Commented out example for branchpattern
@@ -41,6 +65,4 @@ const stylePresets = [
 // Example of stylePresetUrls
 // const stylePresetUrls = ['./presets/example.json'];
 
-export { mapboxGlAccessToken, 
-  // mapboxBaseApiUrl,
-  stylePresets };
+export { gazetteer, mapboxGlAccessToken, stylePresets };
