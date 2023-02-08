@@ -1,5 +1,6 @@
-// Replace with your Mapbox GL token, if any
-const mapboxGlAccessToken = 'pk.eyAAAABBBCCC';
+const mapboxGlAccessToken =
+  'pk.eyJ1Ijoicm9ibGFicyIsImEiOiJwVlg0cnZnIn0.yhekddtKwZohGoORaWjqIw';
+const mapboxBaseApiUrl = 'https://api.mapbox.com';
 
 // Example of setting up a gazetteer object. This is described in the `README`
 // but these are the options that populate the dropdown in the UI that take you
@@ -65,4 +66,4 @@ const stylePresets = [
 // Example of stylePresetUrls
 // const stylePresetUrls = ['./presets/example.json'];
 
-export { gazetteer, mapboxGlAccessToken, stylePresets };
+export { gazetteer, mapboxBaseApiUrl, mapboxGlAccessToken, stylePresets };
