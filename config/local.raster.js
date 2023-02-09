@@ -33,7 +33,7 @@ const stylePresets = [
     name: 'USDA NAIP',
     type: 'maplibre-gl',
     url: 'https://raw.githubusercontent.com/roblabs/xyz-raster-sources/master/styles/usda-naip.json',
-  }
+  },
 ];
 
 export { gazetteer, stylePresets };
