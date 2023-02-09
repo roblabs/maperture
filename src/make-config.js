@@ -34,12 +34,12 @@ const makeConfig = localConfig => {
 
   const defaultMapState = {
     bearing: 0,
-    center: { lng: -73.92169, lat: 40.83962 },
+    center: { lng: -90.0, lat: 37.0 },
     pitch: 0,
     showCollisions: false,
-    showBoundaries: false,
+    showBoundaries: true,
     showDiff: false,
-    zoom: 13.25,
+    zoom: 2,
   };
 
   const defaultMaps = defaultStyles.map(
