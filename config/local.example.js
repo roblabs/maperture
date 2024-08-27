@@ -1,6 +1,5 @@
-const mapboxGlAccessToken =
-  'pk.eyJ1Ijoicm9ibGFicyIsImEiOiJwVlg0cnZnIn0.yhekddtKwZohGoORaWjqIw';
-const mapboxBaseApiUrl = 'https://api.mapbox.com';
+// Replace with your Mapbox GL token, if any
+const mapboxGlAccessToken = 'pk.eyAAAABBBCCC';
 
 // Example of setting up a gazetteer object. This is described in the `README`
 // but these are the options that populate the dropdown in the UI that take you
@@ -27,17 +26,25 @@ const stylePresets = [
     type: 'mapbox-gl',
     url: 'mapbox://styles/mapbox/streets-v11',
   },
+  // sublist is used to nest style options in the dropdown
+  // this is helpful if you need to organize a large amount of styles
   {
-    id: 'mapbox-light',
-    name: 'Mapbox Light',
-    type: 'mapbox-gl',
-    url: 'mapbox://styles/mapbox/light-v10',
-  },
-  {
-    id: 'mapbox-dark',
-    name: 'Mapbox Dark',
-    type: 'mapbox-gl',
-    url: 'mapbox://styles/mapbox/dark-v10',
+    name: 'Data viz styles',
+    type: 'sublist',
+    presets: [
+      {
+        id: 'mapbox-light',
+        name: 'Mapbox Light',
+        type: 'mapbox-gl',
+        url: 'mapbox://styles/mapbox/light-v10',
+      },
+      {
+        id: 'mapbox-dark',
+        name: 'Mapbox Dark',
+        type: 'mapbox-gl',
+        url: 'mapbox://styles/mapbox/dark-v10',
+      },
+    ],
   },
   {
     id: 'openstreetmap',
@@ -66,4 +73,4 @@ const stylePresets = [
 // Example of stylePresetUrls
 // const stylePresetUrls = ['./presets/example.json'];
 
-export { gazetteer, mapboxBaseApiUrl, mapboxGlAccessToken, stylePresets };
+export { gazetteer, mapboxGlAccessToken, stylePresets };
