@@ -15,8 +15,8 @@
 
   export let map;
   export let numberOfMaps;
-  export let themeLabel = '';
   export let highlightDifferences = false;
+  export let labelStyle = '';
 
   const dispatch = createEventDispatcher();
 
@@ -35,7 +35,7 @@
     stylesheet = map?.style;
   }
 
-  $: mapType = map.type;
+  $: mapRenderer = map.renderer;
 
   const setProps = (id, num) => {
     props = {
@@ -43,10 +43,11 @@
       mapStyle: map,
       numberOfMaps: num,
     };
+    setMapComponent(mapRenderer);
   };
 
-  const setMapComponent = mapType => {
-    switch (mapType) {
+  const setMapComponent = mapRenderer => {
+    switch (mapRenderer) {
       case 'google':
         MapComponent = GoogleMap;
         break;
@@ -58,12 +59,12 @@
         break;
       case 'maplibre-gl':
         MapComponent = GlMap;
-        props.mapType = mapType;
+        props.mapRenderer = mapRenderer;
         break;
       case 'mapbox-gl':
       default:
         MapComponent = GlMap;
-        props.mapType = mapType;
+        props.mapRenderer = mapRenderer;
     }
   };
 
@@ -114,13 +115,14 @@
     setProps(mapId, numberOfMaps);
   }
 
-  $: setMapComponent(mapType);
+  $: setMapComponent(mapRenderer);
 
   $: mapStateProps = getMapStateProps($$restProps);
 </script>
 
 <div class="map-container">
-  {#key mapType}
+  <div class="screenshot-label-transparent">{map.name ?? map.id}</div>
+  {#key mapRenderer}
     <div class="map" class:highlight-diff={highlightDifferences}>
       <svelte:component
         this={MapComponent}
@@ -137,7 +139,8 @@
       id={map.id}
       class={`map-label-container ${
         numberOfMaps === 2 ? `map-label-container-${map.index}` : ''
-      } ${themeLabel}`}
+      }`}
+      style={labelStyle}
     >
       <MapLabel
         index={map.index}
@@ -145,6 +148,7 @@
         onClose={removeMap}
         disableClose={numberOfMaps <= 1}
         mapState={mapStateProps}
+        {stylesheet}
         on:mapState={handleMapMove}
       />
     </div>
@@ -166,28 +170,33 @@
 
   .map-label-container {
     position: absolute;
-    right: 1em;
-    bottom: 2em;
-  }
-
-  .map-label-container-0 {
-    right: unset;
-    left: 1em;
-  }
-
-  .map-label-offset {
-    position: absolute;
-    margin-top: 48px;
-    left: 0;
     right: 0;
-    bottom: unset;
-  }
-
-  .map-label-responsive {
-    position: fixed;
+    bottom: 0;
+    margin-right: 1em;
+    margin-bottom: 2em;
+    width: auto;
+    max-width: calc(100% - 6em);
+    min-width: 300px;
   }
 
   .highlight-diff {
     filter: invert(1) opacity(0.5);
+  }
+
+  .screenshot-label {
+    background-color: white;
+    position: absolute;
+    z-index: 1000;
+    margin: 0.25rem;
+    width: calc(100% - 1.5rem);
+    padding: 0.5rem;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .screenshot-label-transparent {
+    display: none;
   }
 </style>

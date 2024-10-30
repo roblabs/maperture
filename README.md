@@ -11,7 +11,7 @@ View a [demo here](https://stamen.github.io/maperture/).
 ## Get started
 
 1. Install the dependencies: `yarn install`
-2. Make a local config module: `cp src/config/local.example.js src/config/local.js` and edit the config file as appropriate
+2. Make a local config module: `cp public/config/local.example.js public/config/local.js` and edit the config file as appropriate
 3. Start the dev server: `yarn dev`
 
 ## Building and running in production mode
@@ -21,7 +21,7 @@ View a [demo here](https://stamen.github.io/maperture/).
 
 ## Local config
 
-The compare tool allows you to use a local config file (`src/config/local.js`) to customize for your use case.
+The compare tool allows you to use a local config file (`public/config/local.js`) to customize for your use case.
 
 Here, you can customize the following options:
 
@@ -31,9 +31,10 @@ Here, you can customize the following options:
 - `stylePresets`: A list of styles with urls to show in the dropdowns. Styles must have the following keys:
   - `id`: a unique id
   - `name`: a display name
-  - `type`: the type of map (`mapbox-gl`, `maplibre-gl`, `google`, `leaflet`)
+  - `type`: the type of map or referencing a sublist of presets (`mapbox-gl`, `maplibre-gl`, `google`, `leaflet`, `sublist`)
   - `url`: (currently applies to `mapbox-gl`, `maplibre-gl`, and `leaflet` maps only) the style's url
   - `mapId`: (currently `google` only) the style's id
+  - [`presets`]: used only with `type: sublist`, this allows one level of nesting to add an additional nested list of style presets following this format
 - `branchPatterns`: An array of objects that specify how to build a URL to fetch a style living on a branch with the following keys:
   - `pattern`: a tokenized url pattern using `{branch}` and `{style}` tokens
   - `styles`: an array specifying specific styles you can view on the specified branch
@@ -64,7 +65,7 @@ Here, you can customize the following options:
 
   This creates an option group called **Locations** with two options (**San Francisco** and **Washington DC**). Selecting **San Francisco** or **Washington DC** zooms and centers the map view as specified.
 
-For more details on how these should look, see the example in [`src/config/local.example.js`](./src/config/local.example.js).
+For more details on how these should look, see the example in [`public/config/local.example.js`](./public/config/local.example.js).
 
 ## Setting up the app in your repo
 

@@ -14,13 +14,13 @@
   export let mapStyle;
   export let numberOfMaps;
 
-  export let mapType;
+  export let mapRenderer;
 
   let renderer;
 
   // Mapbox and MapLibre share a Map component since they are so similar and utilize the same methods
   const importRenderer = async () => {
-    if (mapType === 'maplibre-gl') {
+    if (mapRenderer === 'maplibre-gl') {
       await import('maplibre-gl/dist/maplibre-gl.css');
       renderer = await import('maplibre-gl');
     } else {
@@ -96,9 +96,14 @@
 
     let html = '<div class="popup">';
     for (const feature of dedupedFeatures) {
-      const { properties } = feature;
-      html += `<h2 class="popup-source-layer">${feature.source}: ${feature.sourceLayer}</h2>`;
+      html += `<div class="popup-feature">`;
+      const { properties, layer } = feature;
+      html += `<div class="popup-label-heading">layer id</div>`;
+      html += `<div class="popup-layer-id">${layer.id}</div>`;
+      html += `<div class="popup-label-heading">source: source-layer</div>`;
+      html += `<div class="popup-source-layer"><span class="popup-source">${feature.source}:</span> ${feature.sourceLayer}</div>`;
       if (properties && Object.keys(properties).length) {
+        html += `<div class="popup-label-heading">properties</div>`;
         Object.keys(properties)
           .sort()
           .forEach(key => {
@@ -108,6 +113,7 @@
       } else {
         html += `<p class="popup-no-properties">No properties</p>`;
       }
+      html += `</div>`;
     }
     html += '</div>';
     return html;
@@ -115,9 +121,9 @@
 
   onMount(async () => {
     await importRenderer();
-    const mapRenderer = renderer;
+    const glLibrary = renderer;
 
-    map = new mapRenderer.Map({
+    map = new glLibrary.Map({
       container: id,
       style: url,
       preserveDrawingBuffer: true,
@@ -149,9 +155,8 @@
     map.on('click', e => {
       let renderedFeatures = map.queryRenderedFeatures(e.point);
       if (!renderedFeatures.length) return;
-
       if (!isPopupOpen) {
-        popup = new mapRenderer.Popup()
+        popup = new glLibrary.Popup()
           .setLngLat(e.lngLat)
           .setHTML(getPopupHtmlString(renderedFeatures))
           .setMaxWidth(360)
@@ -189,15 +194,18 @@
 
   // Resize the map when adding more maps and changing container size
   $: if (map && numberOfMaps) {
-    map.once('render', () => {
-      const container = document.getElementById(id);
-      if (container) {
-        const resizeObserver = new ResizeObserver(() => {
-          map.resize({ resize: true });
-        });
-        resizeObserver.observe(container);
-      }
-    });
+    // As of `v3.0.0` maplibre no longer needs this resizing: https://github.com/maplibre/maplibre-gl-js/blob/main/CHANGELOG.md#potentially-breaking-changes
+    if (mapRenderer !== 'maplibre-gl') {
+      map.once('render', () => {
+        const container = document.getElementById(id);
+        if (container) {
+          const resizeObserver = new ResizeObserver(() => {
+            map.resize({ resize: true });
+          });
+          resizeObserver.observe(container);
+        }
+      });
+    }
   }
 </script>
 
@@ -208,6 +216,13 @@
     height: 100%;
   }
 
+  :global(.popup-label-heading) {
+    font-size: 14px;
+    color: #666;
+    font-weight: 200;
+    font-style: italic;
+  }
+
   :global(.popup) {
     min-width: 180px;
     padding-right: 12px;
@@ -215,9 +230,31 @@
     overflow: auto;
   }
 
-  :global(.popup-source-layer) {
+  :global(.popup-feature) {
+    margin-top: 18px;
+    margin-left: 3px;
+  }
+
+  :global(.popup-feature):first-child {
+    margin-top: 0;
+  }
+
+  :global(.popup-layer-id) {
+    font-weight: 600;
     font-size: 16px;
     line-height: 16px;
+    margin-bottom: 6px;
+  }
+
+  :global(.popup-source) {
+    font-weight: 600;
+  }
+
+  :global(.popup-source-layer) {
+    font-size: 14px;
+    line-height: 14px;
+    margin-bottom: 6px;
+    color: #666;
   }
 
   :global(.popup-property) {
@@ -240,5 +277,9 @@
 
   :global(.popup-property-value) {
     float: right;
+  }
+
+  :global(.mapboxgl-control-container .mapboxgl-ctrl-logo) {
+    display: none;
   }
 </style>

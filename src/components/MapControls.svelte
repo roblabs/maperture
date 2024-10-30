@@ -80,13 +80,21 @@
   const downloadScreenshot = async () => {
     const mapsView = document.getElementsByClassName('maps')[0];
 
-    let adjustedEls = [];
+    let adjustedLabels = [
+      ...document.getElementsByClassName('screenshot-label-transparent'),
+    ];
+    adjustedLabels.forEach(el => {
+      el.classList.remove('screenshot-label-transparent');
+      el.classList.add('screenshot-label');
+    });
+
+    let adjustedBorders = [];
     // Remove border on mirror mode screenshot
     if (viewMode === 'mirror') {
-      adjustedEls = [
+      adjustedBorders = [
         ...document.getElementsByClassName('map-container-border'),
       ];
-      adjustedEls.forEach(el => {
+      adjustedBorders.forEach(el => {
         el.classList.remove('map-container-border');
         el.classList.add('map-container-border-transparent');
       });
@@ -105,9 +113,15 @@
       );
     });
 
+    // Cleanup labels
+    adjustedLabels.forEach(el => {
+      el.classList.remove('screenshot-label');
+      el.classList.add('screenshot-label-transparent');
+    });
+
     // Cleanup for mirror mode border
     if (viewMode === 'mirror') {
-      adjustedEls.forEach(el => {
+      adjustedBorders.forEach(el => {
         el.classList.remove('map-container-border-transparent');
         el.classList.add('map-container-border');
       });
@@ -121,6 +135,13 @@
   const toggleLinkLocations = () => {
     linkLocationsStore.update(value => !value);
   };
+
+  function onKeyDown(e) {
+    if (e.target.tagName.toLowerCase() === 'input') return;
+    if (e.key === 'c' || e.key === 'C') showCollisions = !showCollisions;
+    if (e.key === 't' || e.key === 'T') showBoundaries = !showBoundaries;
+    if (e.key === 'd' || e.key === 'D') showDiff = !showDiff;
+  }
 
   $: if (viewMode !== 'swipe' && showDiff) {
     showDiff = false;
@@ -148,11 +169,13 @@
       </div>
 
       <div class="control-section">
-        <Geocoder
-          accessToken={mapboxGlAccessToken}
-          geocoder={null}
-          on:result={handleGeocoderResult}
-        />
+        {#if mapboxGlAccessToken}
+          <Geocoder
+            accessToken={mapboxGlAccessToken}
+            geocoder={null}
+            on:result={handleGeocoderResult}
+          />
+        {/if}
       </div>
 
       <div class="control-section">
@@ -162,17 +185,23 @@
       <div class="control-section">
         <div class="checkboxes">
           <label class="checkbox-container">
-            <span class="checkbox-label">Label Collisions</span>
+            <span class="checkbox-label"
+              >Label <span class="hotkey">C</span>ollisions</span
+            >
             <input type="checkbox" bind:checked={showCollisions} />
           </label>
           <label class="checkbox-container">
-            <span class="checkbox-label">Tile Boundaries</span>
+            <span class="checkbox-label"
+              ><span class="hotkey">T</span>ile Boundaries</span
+            >
             <input type="checkbox" bind:checked={showBoundaries} />
           </label>
           {#if viewMode === 'swipe'}
             <Tooltip title="Highlights visual differences between two styles.">
               <label class="checkbox-container">
-                <span class="checkbox-label">Highlight differences</span>
+                <span class="checkbox-label"
+                  >Highlight <span class="hotkey">D</span>ifferences</span
+                >
                 <input type="checkbox" bind:checked={showDiff} />
               </label>
             </Tooltip>
@@ -241,6 +270,8 @@
   </button>
 {/if}
 
+<svelte:window on:keydown={onKeyDown} />
+
 <style>
   .map-controls {
     background: white;
@@ -307,5 +338,10 @@
   .link-button:hover {
     color: #666;
     cursor: pointer;
+  }
+
+  .hotkey {
+    text-decoration: underline;
+    font-weight: 500;
   }
 </style>

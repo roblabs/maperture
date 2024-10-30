@@ -18,6 +18,9 @@
   import { validateMapState } from './map-state-utils';
   import throttle from 'lodash.throttle';
   import isEqual from 'lodash.isequal';
+  import { addLink } from 'stamen-attribution';
+  addLink('https://stamen.com/blog/', 'Learn more');
+  addLink('https://github.com/stamen/maperture', 'Fork on Github');
 
   export let localConfig;
 
@@ -87,7 +90,13 @@
   });
 
   mapsStore.subscribe(maps => {
-    settings = { ...settings, maps };
+    // The isPolling key never makes it to the hash so we can know if prop updates downstream
+    // in MapStyleInputWrapper are coming from polled styles or from history
+    const nextMaps = JSON.parse(JSON.stringify(maps)).map(m => {
+      delete m.isPolling;
+      return m;
+    });
+    settings = { ...settings, maps: nextMaps };
   });
 
   mapLocationsStore.subscribe(locations => {
@@ -191,6 +200,8 @@
     on:setDimensions={handleDimensions}
   />
 
+  <div class="attribution-space" />
+
   <div class="map-controls-container">
     <MapControls
       {mapboxGlAccessToken}
@@ -207,6 +218,12 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+  }
+
+  .attribution-space {
+    height: 33px;
+    width: 100%;
+    background-color: black;
   }
 
   .map-controls-container {

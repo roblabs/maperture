@@ -3,11 +3,17 @@
   import { createBranchUrl } from '../branch-utils';
   import { shortcut } from '../shortcut';
   import { fetchUrl } from '../fetch-url';
+  import StylesDropdown from './inputs/StylesDropdown.svelte';
+  import Dropdown from './inputs/Dropdown/Dropdown.svelte';
+
   const dispatch = createEventDispatcher();
 
   export let dropdownDisplayOptions;
   export let dropdownValue;
+  export let rendererOptions;
+  export let rendererValue;
   export let activeUrl;
+  export let index;
 
   let selected;
 
@@ -41,14 +47,14 @@
     // Check that should poll to set timer
     if (pollCondition(url)) {
       // Check poll condition again to cancel action for a url
-      setTimeout(() => pollCondition(url) && fetchStyle(url), 3000);
+      setTimeout(() => pollCondition(url) && fetchStyle(url, true), 3000);
     }
   };
 
   // Handle updating the map store
   const handleMapStyleUpdate = mapObj => {
     // Clean up style before dispatching
-    const excludedKeys = ['dropdownType', 'selected'];
+    const excludedKeys = ['dropdownType', 'selected', 'defaultText'];
     let value = {
       ...Object.fromEntries(
         Object.entries(mapObj).filter(([k, v]) => !excludedKeys.includes(k))
@@ -66,7 +72,7 @@
   };
 
   // Fetch the style json from the URL
-  const fetchStyle = async url => {
+  const fetchStyle = async (url, isPolling = false) => {
     let style;
     try {
       const data = await fetchUrl(url);
@@ -75,7 +81,11 @@
         // TODO create checks by type for non-mapbox maps
         style = data;
         poll(url);
-        handleMapStyleUpdate({ ...selected, style, url });
+        if (isPolling) {
+          dispatch('updateMapStore', { value: { style, isPolling } });
+        } else {
+          handleMapStyleUpdate({ ...selected, style, url, isPolling });
+        }
         return { status: '200' };
       }
     } catch (err) {
@@ -93,6 +103,7 @@
       // Call poll after setting selected.url on success
       poll(url);
     }
+    dispatch('setUrl', { value: url });
   };
 
   // Submit URL from a custom or branch style
@@ -185,22 +196,12 @@
 </script>
 
 <div class="map-style-input">
-  <select
-    id="styles"
-    on:change={e => dispatch('selectOption', { dropdownId: e.target.value })}
-  >
-    {#each Object.keys(dropdownDisplayOptions) as group}
-      <optgroup value={group} label={group}>
-        {#each dropdownDisplayOptions[group] as value}
-          <option
-            value={value.dropdownId}
-            selected={dropdownValue.dropdownId === value.dropdownId}
-            >{value.text}</option
-          >
-        {/each}
-      </optgroup>
-    {/each}
-  </select>
+  <StylesDropdown
+    {dropdownDisplayOptions}
+    {dropdownValue}
+    {index}
+    onSelect={v => dispatch('selectOption', { dropdownId: v })}
+  />
 
   {#if selected?.dropdownType === 'custom' || selected?.dropdownType === 'branch'}
     <div class="custom-input">
@@ -225,15 +226,37 @@
       {error}
     </div>
   {/if}
+
+  <div class="renderer-control">
+    <span class="nowrap">Rendered with</span>
+    <Dropdown
+      options={rendererOptions.map(v => ({ label: v.name, value: v.value }))}
+      activeValue={rendererValue}
+      onSelect={v => dispatch('selectRenderer', { value: v })}
+      direction="up"
+    />
+  </div>
 </div>
 
 <style>
   .map-style-input {
     margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-width: 300px;
   }
 
   .custom-input {
     margin-top: 0px;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+  }
+
+  .custom-input input {
+    flex-grow: 1;
+    width: 0;
   }
 
   .input-error:focus {
@@ -249,5 +272,30 @@
     border-radius: 4px;
     padding: 6px;
     color: white;
+  }
+
+  .nowrap {
+    white-space: nowrap;
+  }
+
+  .renderer-control {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+  }
+
+  .renderer-control select {
+    flex-grow: 1;
+    min-width: 0px;
+  }
+
+  select,
+  option.selected {
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 </style>

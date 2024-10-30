@@ -1,5 +1,34 @@
 ## Unreleased
 
+## 0.16.0
+
+- Add multi-level dropdowns
+
+## 0.15.1
+
+- Update Maplibre GL to `v3.6.2`
+
+## 0.15.0
+
+- Switch to module for Stamen attribution
+- Add CSS auto-prefixing to rollup config
+- Add check for Mapbox URLs in source object of stylesheet
+- Add labels when screenshotting
+
+## 0.14.0
+
+- Add Stamen attribution
+- Add Stamen map tiles in GitHub Pages deploy
+- Upgrade to latest version of `mapbox-gl`
+
+## 0.13.1
+
+- Update dropdown styling to accomodate long style names
+- Add layer id to feature popup
+- Fix bug for branch dropdown option while polling a style
+
+## 0.13.0
+
 - Add a Github Action for pushing to gh-pages on pushes to main
 - Add support for Mapbox Atlas.
 - Update app UI on browser history changes
@@ -7,6 +36,9 @@
 - Add support for Tangram styles
 - Switch out `BASE_PATH` for `window.location.pathname` in url updates
 - Remove border on screenshots
+- Add renderer dropdown for styles that support mulitple renderers
+- Don't load geocoder without Mapbox token
+- Add hotkeys for map controls
 
 ## 0.12.0
 

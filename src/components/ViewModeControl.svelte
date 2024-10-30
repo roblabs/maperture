@@ -2,6 +2,7 @@
   import { createEventDispatcher } from 'svelte';
   import { linkLocations as linkLocationsStore } from '../stores';
   import { VIEW_MODES } from '../constants';
+  import Dropdown from './inputs/Dropdown/Dropdown.svelte';
 
   export let mode;
   export let mapsNum;
@@ -60,12 +61,23 @@
 
   // Trigger only on incoming mode prop
   $: updateSelectedModeFromProps(mode);
+
+  $: onSelect = v => {
+    selectedMode = v;
+  };
 </script>
 
-<div>
-  <select bind:value={selectedMode}>
-    {#each viewModes as mode}
-      <option>{mode}</option>
-    {/each}
-  </select>
+<div class="dropdown-container">
+  <Dropdown
+    options={viewModes.map(v => ({ label: v, value: v }))}
+    activeValue={selectedMode}
+    {onSelect}
+    direction="down"
+  />
 </div>
+
+<style>
+  .dropdown-container {
+    min-width: 100px;
+  }
+</style>
