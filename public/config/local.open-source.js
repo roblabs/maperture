@@ -29,12 +29,6 @@ const stylePresets = [
     url: 'https://demotiles.maplibre.org/style.json',
   },
   {
-    id: 'openstreetmap-americana',
-    name: 'OpenStreetMap Americana',
-    type: 'maplibre-gl',
-    url: 'https://zelonewolf.github.io/openstreetmap-americana/style.json',
-  },
-  {
     id: 'naturalearthtiles',
     name: 'Natural Earth Tiles',
     type: 'maplibre-gl',
