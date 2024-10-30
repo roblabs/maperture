@@ -46,7 +46,7 @@ const makeConfig = localConfig => {
     (style, i) => localConfig?.stylePresets?.[i] ?? style
   );
 
-  const defaultViewMode = 'swipe';
+  const defaultViewMode = 'mirror';
 
   const defaultBranchPatterns = [
     {
