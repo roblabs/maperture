@@ -10,6 +10,7 @@
   },
   "private": true,
   "scripts": {
+    "prebuild": "cp public/config/local.open-source.js public/config/local.js",
     "build": "rollup -c",
     "build-package": "rm -rf dist && rollup -c rollup.config.package.js",
     "dev": "rollup -c -w",
