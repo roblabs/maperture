@@ -13,10 +13,10 @@ const gazetteer = {
       },
     },
     {
-      'Washington DC': {
-        zoom: 6,
-        center: { lng: -77.0435, lat: 38.9098 },
-      },
+      'Washington DC': { zoom: 6, center: { lng: -77.0435, lat: 38.9098 } },
+    },
+    {
+      'Innsbruck, Austria': { zoom: 6, center: { lng: 11.401, lat: 47.263 } },
     },
   ],
 };
@@ -27,6 +27,14 @@ const stylePresets = [
     name: 'MapLibre',
     type: 'maplibre-gl',
     url: 'https://demotiles.maplibre.org/style.json',
+  },
+  {
+    id: 'maplibre-OpenMapTiles-Innsbruck',
+    name: 'OpenMapTiles at Innsbruck, Austria',
+    type: 'maplibre-gl',
+    url: 'https://demotiles.maplibre.org/styles/osm-bright-gl-style/style.json',
+    attribution:
+      '<a href="https://github.com/maplibre/demotiles">OpenMapTiles centered around Innsbruck, Austria</a>',
   },
   {
     id: 'naturalearthtiles',
