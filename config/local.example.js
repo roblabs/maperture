@@ -24,6 +24,42 @@ const gazetteer = {
 
 const stylePresets = [
   {
+    id: 'stamen-watercolor',
+    name: 'Stamen Watercolor',
+    type: 'leaflet',
+    url: 'https://watercolormaps.collection.cooperhewitt.org/tile/watercolor/{z}/{x}/{y}.jpg',
+  },
+  {
+    id: 'stamen-terrain',
+    name: 'Stamen Terrain',
+    type: 'maplibre-gl',
+    url: 'https://tiles.stadiamaps.com/styles/stamen_terrain.json',
+  },
+  {
+    id: 'stamen-toner',
+    name: 'Stamen Toner',
+    type: 'maplibre-gl',
+    url: 'https://tiles.stadiamaps.com/styles/stamen_toner.json',
+  },
+  {
+    id: 'stamen-toner-lite',
+    name: 'Stamen Toner Lite',
+    type: 'maplibre-gl',
+    url: 'https://tiles.stadiamaps.com/styles/stamen_toner_lite.json',
+  },
+  {
+    id: 'stamen-toner-dark',
+    name: 'Stamen Toner Dark',
+    type: 'maplibre-gl',
+    url: 'https://tiles.stadiamaps.com/styles/stamen_toner_dark.json',
+  },
+  {
+    id: 'stamen-toner-blacklite',
+    name: 'Stamen Toner Blacklite',
+    type: 'maplibre-gl',
+    url: 'https://tiles.stadiamaps.com/styles/stamen_toner_blacklite.json',
+  },
+  {
     id: 'mapbox-streets',
     name: 'Mapbox Streets',
     type: 'mapbox-gl',
@@ -72,6 +108,8 @@ const stylePresets = [
   // },
 ];
 
+const branchPatterns = null; // pass null value to suppress the "Styles on a branch" menu, if you aren't using it
+
 // Commented out example for branchpattern
 // const branchPatterns = [
 //   {
@@ -89,4 +127,10 @@ const stylePresets = [
 // Example of stylePresetUrls
 // const stylePresetUrls = ['./presets/example.json'];
 
-export { gazetteer, mapboxGlAccessToken, stylePresets, maptilerApiKey };
+export {
+  gazetteer,
+  mapboxGlAccessToken,
+  branchPatterns,
+  stylePresets,
+  maptilerApiKey,
+};
